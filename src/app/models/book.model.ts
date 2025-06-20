@@ -19,7 +19,7 @@ const bookSchema = new Schema<IBook>(
         isbn: {
             type: String,
             required: true,
-            unique: [true, "isbn fiend value is unique"]
+            unique: true
         },
         description: {
             type: String
@@ -27,7 +27,7 @@ const bookSchema = new Schema<IBook>(
         copies: {
             type: Number,
             required: true,
-            min: 0
+            min: [0, 'Copies must be a positive number']
         },
         available: {
             type: Boolean,
