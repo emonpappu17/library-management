@@ -1,16 +1,16 @@
 import express, { Application, Response, Request, NextFunction, ErrorRequestHandler } from "express";
-import { bookRoutes } from "./app/controllers/book.controller";
-import { borrowRoutes } from "./app/controllers/borrow.controller";
+// import { borrowRoutes } from "./app/controllers/borrow.controller";
+import { bookRoutes } from "./app/routes/book.routes";
+import { borrowRoutes } from "./app/routes/borrow.routes";
 
 const app: Application = express();
-
 app.use(express.json());
 
-// Route mounting
+// ✅ Route Mounting
 app.use("/api/books", bookRoutes)
 app.use("/api/borrow", borrowRoutes)
 
-// Not found route handler
+// ✅ Not Found
 app.use((req: Request, res: Response) => {
     res.status(404).json({
         success: false,
@@ -18,14 +18,13 @@ app.use((req: Request, res: Response) => {
     })
 })
 
-// Global Error Handler 
+// ✅ Global Error Handler
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-    let statusCode = 500;
-    let message = 'Something went wrong';
+    // let statusCode = 500;
+    let statusCode = error.statusCode || 500;
+    // let message = 'Something went wrong';
+    let message = error.message || 'Something went wrong'
 
-    console.log('check--->', error);
-
-    // Check for Mongoose Validation Error
     if (error.name === 'ValidationError') {
         statusCode = 400;
         message = 'Validation failed';

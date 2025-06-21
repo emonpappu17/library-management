@@ -1,10 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Book } from "../models/book.model";
 
-export const bookRoutes = express.Router();
-
-// Create Book
-bookRoutes.post("/", async (req: Request, res: Response, next: NextFunction) => {
+// ✅ Create Book
+export const createBook = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const body = req.body;
         const book = await Book.create(body);
@@ -13,18 +11,16 @@ bookRoutes.post("/", async (req: Request, res: Response, next: NextFunction) => 
             message: "Book created successfully",
             data: book
         })
-    } catch (error: any) {
+    } catch (error) {
         next(error)
     }
-})
+}
 
-// Get All Books
-bookRoutes.get("/", async (req: Request, res: Response, next: NextFunction) => {
+// ✅ Get All Books
+export const getAllBooks = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { filter, sortBy = 'createdAt', sort = 'desc', limit = 10 } = req.query;
-
         const filterCondition = filter ? { genre: filter } : {};
-
         const sortOrder = sort === 'asc' ? 1 : -1;
 
         const books = await Book.find(filterCondition).sort({ [sortBy as string]: sortOrder }).limit(Number(limit));
@@ -39,36 +35,100 @@ bookRoutes.get("/", async (req: Request, res: Response, next: NextFunction) => {
     } catch (error) {
         next(error)
     }
-})
+}
 
-// Get Book by ID
-bookRoutes.get("/:bookId", async (req: Request, res: Response, next: NextFunction) => {
+// ✅ Get Book by ID
+export const getBookById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const id = req.params.bookId;
         const book = await Book.findById(id);
-        console.log('book-=---->', book);
-        // if (!book) {
-        //     return res.status(404).json({
-        //         success: false,
-        //         message: "Book not found",
-        //         error: {
-        //             name: "NotFoundError",
-        //             path: "bookId",
-        //             message: `Book with ID ${id} does not exist`
-        //         }
-        //     });
-        // }
+
+        if (!book) {
+            res.status(404).json({
+                success: false,
+                message: "Book not found",
+                error: {
+                    name: "NotFoundError",
+                    path: "bookId",
+                    message: `Book with ID ${id} does not exist`
+                }
+            });
+            return
+        }
 
         res.json({
             success: true,
             message: "Book retrieved successfully",
             data: book
-        })
-
+        });
     } catch (error) {
         next(error)
     }
-})
+}
+
+// ✅ Update Book 
+export const updateBook = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = req.params.bookId;
+        const updateData = req.body;
+        const book = await Book.findById(id);
+
+        if (!book) {
+            res.status(404).json({
+                success: false,
+                message: "Book not found",
+                error: {
+                    name: "NotFoundError",
+                    path: "bookId",
+                    message: `Book with ID ${id} does not exist`,
+                },
+            });
+            return
+        }
+
+        Object.assign(book, updateData);
+        book.checkAvailability();
+        await book.save();
+
+        res.json({
+            success: true,
+            message: "Book updated successfully",
+            data: book
+        });
+    } catch (error) {
+        next(error)
+    }
+}
+
+// ✅ Delete Book
+export const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = req.params.bookId;
+        const deletedBook = await Book.findByIdAndDelete(id);
+
+        if (!deletedBook) {
+            res.status(404).json({
+                success: false,
+                message: "Book not found",
+                error: {
+                    name: "NotFoundError",
+                    path: "bookId",
+                    message: `Book with ID ${id} does not exist`,
+                },
+            });
+            return
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Book deleted successfully",
+            data: null
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 
 
 
