@@ -1,5 +1,4 @@
 import express, { Application, Response, Request, NextFunction, ErrorRequestHandler } from "express";
-// import { borrowRoutes } from "./app/controllers/borrow.controller";
 import { bookRoutes } from "./app/routes/book.routes";
 import { borrowRoutes } from "./app/routes/borrow.routes";
 
@@ -9,6 +8,9 @@ app.use(express.json());
 // ✅ Route Mounting
 app.use("/api/books", bookRoutes)
 app.use("/api/borrow", borrowRoutes)
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+    res.send("Welcome to library management API")
+})
 
 // ✅ Not Found
 app.use((req: Request, res: Response) => {
@@ -34,7 +36,6 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     else if (error.code === 11000) {
         statusCode = 400;
         message = `Duplicate value for: isbn`;
-        // message = `Duplicate value for: ${Object.keys(error.keyPattern).join(', ')}`;
     }
 
     res.status(statusCode).json({

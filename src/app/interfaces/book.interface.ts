@@ -9,6 +9,3 @@ export interface IBook {
     checkAvailability(): void;
 }
 
-// export interface BookInstanceMethods {
-//     checkAvailability(): void;
-// }
