@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Borrow } from "../models/borrow.model";
 
-// Borrow a Book
+// ✅ Borrow a Book
 export const borrowBook = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { book, quantity, dueDate } = req.body;
@@ -18,7 +18,7 @@ export const borrowBook = async (req: Request, res: Response, next: NextFunction
 }
 
 
-// Borrowed Books Summary
+// ✅ Borrowed Books Summary
 export const getBorrowedBooksSummary = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const summary = await Borrow.aggregate([

@@ -9,10 +9,6 @@ app.use(express.json());
 // ✅ Route Mounting
 app.use("/api/books", bookRoutes)
 app.use("/api/borrow", borrowRoutes)
-// app.get("/", (req: Request, res: Response, next: NextFunction) => {
-//     res.send("Welcome to library management API")
-// })
-
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, "../public")));
@@ -21,7 +17,6 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.get("/", (req: Request, res: Response) => {
     res.sendFile(path.join(__dirname, "../public/welcome.html"));
 });
-
 
 // ✅ Not Found
 app.use((req: Request, res: Response) => {
@@ -33,9 +28,7 @@ app.use((req: Request, res: Response) => {
 
 // ✅ Global Error Handler
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-    // let statusCode = 500;
     let statusCode = error.statusCode || 500;
-    // let message = 'Something went wrong';
     let message = error.message || 'Something went wrong'
 
     if (error.name === 'ValidationError') {
