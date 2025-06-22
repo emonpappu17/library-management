@@ -1,6 +1,7 @@
 import express, { Application, Response, Request, NextFunction, ErrorRequestHandler } from "express";
 import { bookRoutes } from "./app/routes/book.routes";
 import { borrowRoutes } from "./app/routes/borrow.routes";
+import path from "path";
 
 const app: Application = express();
 app.use(express.json());
@@ -8,9 +9,19 @@ app.use(express.json());
 // ✅ Route Mounting
 app.use("/api/books", bookRoutes)
 app.use("/api/borrow", borrowRoutes)
-app.get("/", (req: Request, res: Response, next: NextFunction) => {
-    res.send("Welcome to library management API")
-})
+// app.get("/", (req: Request, res: Response, next: NextFunction) => {
+//     res.send("Welcome to library management API")
+// })
+
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, "../public")));
+
+// Root route to serve welcome page
+app.get("/", (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, "../public/welcome.html"));
+});
+
 
 // ✅ Not Found
 app.use((req: Request, res: Response) => {
