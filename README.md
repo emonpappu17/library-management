@@ -186,10 +186,3 @@ All errors follow this structure:
 
 ```
 
-
-
-## Bonus Submission
-
-- 📹 [Video Explanation Link](https://chatgpt.com/c/685424bf-1b10-8012-a6e7-fb2f660463d4#) *(Replace with actual public video link)*
-- 🔗 [Live Deployment Link](https://chatgpt.com/c/685424bf-1b10-8012-a6e7-fb2f660463d4#) *(Optional if hosted)*
-
