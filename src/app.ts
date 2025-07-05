@@ -2,9 +2,11 @@ import express, { Application, Response, Request, NextFunction, ErrorRequestHand
 import { bookRoutes } from "./app/routes/book.routes";
 import { borrowRoutes } from "./app/routes/borrow.routes";
 import path from "path";
+import cors from "cors"
 
 const app: Application = express();
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" }));
 
 // ✅ Route Mounting
 app.use("/api/books", bookRoutes)

@@ -71,6 +71,7 @@ export const updateBook = async (req: Request, res: Response, next: NextFunction
     try {
         const id = req.params.bookId;
         const updateData = req.body;
+
         const book = await Book.findById(id);
 
         if (!book) {
